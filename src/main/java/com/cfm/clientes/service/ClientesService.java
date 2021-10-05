@@ -1,5 +1,6 @@
 package com.cfm.clientes.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +33,8 @@ public class ClientesService implements IClientesService {
 	@Autowired
 	private EntityManager entityManager;
 	
-	private static final String operationUpdate = "modificar";
-	private static final String operationSave = "guardar";
+	private static final String OPTION_UPDATE = "modificar";
+	private static final String OPTION_SAVE = "guardar";
 	
 	/**
 	 * Metodo para obtener la lista de los clientes
@@ -47,8 +48,12 @@ public class ClientesService implements IClientesService {
 	 * Metodo para obtener el registro de un cliente a traves de su RFC
 	 */
 	@Override
-	public Optional<ClienteEntity> buscarClienteByRFC(String rfc) {
-		return repoClientes.findById(rfc); 
+	public List<ClienteEntity> buscarClienteByRFC(String rfc) throws BusinessException {
+		Optional<ClienteEntity> cliente = repoClientes.findById(rfc);
+		if (!cliente.isPresent())
+			throw new BusinessException("El RFC del cliente no existe");
+		ClienteEntity clienteEntity = cliente.get();
+		return Arrays.asList(clienteEntity);
 	}
 	
 	/**
@@ -62,10 +67,10 @@ public class ClientesService implements IClientesService {
 		if(!catRegimenFiscal.isPresent())
 			throw new BusinessException("El regimen no existe");
 		
-		if (repoClientes.existsById(cliente.getRfc()) && operacion.equals(operationSave))
+		if (repoClientes.existsById(cliente.getRfc()) && operacion.equals(OPTION_SAVE))
 			throw new BusinessException("El cliente ya existe");
 		
-		if (!repoClientes.existsById(cliente.getRfc()) && operacion.equals(operationUpdate))
+		if (!repoClientes.existsById(cliente.getRfc()) && operacion.equals(OPTION_UPDATE))
 			throw new BusinessException("El rfc del cliente no existe");
 		
 		if(cliente.getRfc().length() != catRegimenFiscal.get().getRfcSize())
@@ -83,8 +88,8 @@ public class ClientesService implements IClientesService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClienteEntity> buscarClienteByRegimen(Integer sizeRFC) {
-		Query query = entityManager.createQuery("SELECT c FROM tbl_cliente c INNER JOIN cat_regimen_fiscal r ON r.id = c.idRegimenFiscal WHERE r.rfcSize =" + sizeRFC.toString());
-		
+		Query query = entityManager.createQuery("SELECT c FROM tbl_cliente c INNER JOIN cat_regimen_fiscal r ON r.id = c.idRegimenFiscal WHERE r.rfcSize = :sizeRFC");
+		query.setParameter("sizeRFC", sizeRFC);
 		return query.getResultList();
 	}
 	

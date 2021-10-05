@@ -1,7 +1,6 @@
 package com.cfm.clientes.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -42,22 +41,16 @@ public class ClientesController {
 	
 	//LISTAR CLIENTES INACTIVOS
 	@GetMapping("/inactivos")
-	public List<ClienteEntity> buscarClientesInactivos(){
+	public ResponseEntity<List<ClienteEntity>> buscarClientesInactivos(){
 		List<ClienteEntity> lista = serviceClientes.buscarClientes('I');
 		String uid=GUIDGenerator.generateGUID();
 		LogHandler.info(uid, getClass(), "buscarClientesInactivos"+Parseador.objectToJson(uid, lista));
-		return lista;
+		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
-	
-	//BUSCAR CLIENTE POR RFC
-	@GetMapping("/buscar/{rfc}")
-	public Optional<ClienteEntity> buscarClienteByRFC(@PathVariable String rfc){
-		return serviceClientes.buscarClienteByRFC(rfc);
-	}
-	
+		
 	//BUSCAR CLIENTES FILTRO
 	@GetMapping(value={"/buscar/regimen/{searchValue}","/buscar/rfc/{searchValue}"})
-	public List<ClienteEntity> filtrarClientes(@PathVariable String searchValue){
+	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue)throws BusinessException {
 		List<ClienteEntity> lista = null;
 		if (searchValue.equals("personas-fisicas")) {
 			lista = serviceClientes.buscarClienteByRegimen(13);
@@ -66,7 +59,7 @@ public class ClientesController {
 		}else {
 			lista = serviceClientes.buscarClienteByRFC(searchValue).stream().toList();
 		}	
-		return lista;
+		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
 	
 	//AGREGAR CLIENTE
