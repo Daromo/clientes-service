@@ -49,15 +49,13 @@ public class ClientesController {
 	}
 		
 	//BUSCAR CLIENTES FILTRO
-	@GetMapping(value={"/buscar/regimen/{searchValue}","/buscar/rfc/{searchValue}"})
+	@GetMapping(value="/buscar/regimen/{searchValue}")
 	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue)throws BusinessException {
 		List<ClienteEntity> lista = null;
 		if (searchValue.equals("personas-fisicas")) {
 			lista = serviceClientes.buscarClienteByRegimen(13);
 		}else if(searchValue.equals("personas-morales")) {
 			lista = serviceClientes.buscarClienteByRegimen(12);
-		}else {
-			lista = serviceClientes.buscarClienteByRFC(searchValue).stream().toList();
 		}	
 		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}

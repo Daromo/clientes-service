@@ -62,7 +62,7 @@ public class ClientesService implements IClientesService {
 	@Override
 	public void guardar(Cliente cliente, String operacion) throws BusinessException {
 
-		Optional<CatRegimenEntity> catRegimenFiscal = repoCatRegimen.findById(cliente.getIdRegimenFiscal());
+		Optional<CatRegimenEntity> catRegimenFiscal = repoCatRegimen.findById(cliente.getRegimenFiscal().getId());
 		
 		if(!catRegimenFiscal.isPresent())
 			throw new BusinessException("El regimen no existe");
@@ -88,7 +88,7 @@ public class ClientesService implements IClientesService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClienteEntity> buscarClienteByRegimen(Integer sizeRFC) {
-		Query query = entityManager.createQuery("SELECT c FROM tbl_cliente c INNER JOIN cat_regimen_fiscal r ON r.id = c.idRegimenFiscal WHERE r.rfcSize = :sizeRFC");
+		Query query = entityManager.createQuery("SELECT c FROM tbl_cliente c INNER JOIN cat_regimen_fiscal r ON r.id = c.regimenFiscal WHERE r.rfcSize = :sizeRFC");
 		query.setParameter("sizeRFC", sizeRFC);
 		return query.getResultList();
 	}

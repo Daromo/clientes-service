@@ -16,7 +16,7 @@ public class Cliente {
 	private String rfc;
 	
 	@NotNull(message = "El argumento idRegimenFiscal no puede ser nulo")
-	private Integer idRegimenFiscal;
+	private RegimenFiscal regimenFiscal;
 	
 	private String nombreCliente;
 	

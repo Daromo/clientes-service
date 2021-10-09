@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -20,8 +22,9 @@ public class ClienteEntity {
 	private String rfc;
 	
 	@NotNull(message = "El argumento idRegimenFiscal no puede ser nulo")
-	@Column(name="id_regimen_fiscal")
-	private Integer idRegimenFiscal;
+	@OneToOne
+	@JoinColumn(name="id_regimen_fiscal")
+	private CatRegimenEntity regimenFiscal;
 	
 	@Column(name = "nombre_cliente")
 	private String nombreCliente;

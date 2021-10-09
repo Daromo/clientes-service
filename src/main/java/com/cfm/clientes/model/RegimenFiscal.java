@@ -8,6 +8,6 @@ import lombok.Setter;
 public class RegimenFiscal {
 
 	private Integer id;
-	private String nombreRegmimen;
+	private String nombreRegimen;
 	private Integer rfcSize;
 }
