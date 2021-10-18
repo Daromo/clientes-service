@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cfm.clientes.exception.BusinessException;
+import com.cfm.clientes.jpa.entity.CatRegimenEntity;
 import com.cfm.clientes.jpa.entity.ClienteEntity;
 import com.cfm.clientes.model.Cliente;
 import com.cfm.clientes.service.IClientesService;
@@ -30,10 +32,13 @@ public class ClientesController {
 	@Autowired
 	private IClientesService serviceClientes;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	//LISTAR CLIENTES ACTIVOS
 	@GetMapping("/activos")
 	public ResponseEntity<List<ClienteEntity>> buscarClientesActivos(){
-		List<ClienteEntity> lista = serviceClientes.buscarClientes('A');
+		List<ClienteEntity> lista = serviceClientes.buscarClienteStatus('A');
 		String uid=GUIDGenerator.generateGUID();
 		LogHandler.info(uid, getClass(), "buscarClientesActivos"+Parseador.objectToJson(uid, lista));
 		return new ResponseEntity<>(lista, HttpStatus.OK);
@@ -42,14 +47,21 @@ public class ClientesController {
 	//LISTAR CLIENTES INACTIVOS
 	@GetMapping("/inactivos")
 	public ResponseEntity<List<ClienteEntity>> buscarClientesInactivos(){
-		List<ClienteEntity> lista = serviceClientes.buscarClientes('I');
+		List<ClienteEntity> lista = serviceClientes.buscarClienteStatus('I');
 		String uid=GUIDGenerator.generateGUID();
 		LogHandler.info(uid, getClass(), "buscarClientesInactivos"+Parseador.objectToJson(uid, lista));
 		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
 		
-	//BUSCAR CLIENTES FILTRO
-	@GetMapping(value="/buscar/regimen/{searchValue}")
+	//BUSCAR CLIENTE POR RFC
+	@GetMapping("/buscar/rfc/{clienteRFC}")
+	public ResponseEntity<Cliente> buscarClienteRFC(@PathVariable String clienteRFC) throws BusinessException{
+		Cliente clienteMapper = modelMapper.map(serviceClientes.buscarClienteByRFC(clienteRFC), Cliente.class);
+		return new ResponseEntity<>(clienteMapper, HttpStatus.OK);
+	}
+	
+	//BUSCAR CLIENTES POR REGIMEN FISCAL
+	@GetMapping("/buscar/regimen/{searchValue}")
 	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue)throws BusinessException {
 		List<ClienteEntity> lista = null;
 		if (searchValue.equals("personas-fisicas")) {
@@ -59,7 +71,6 @@ public class ClientesController {
 		}	
 		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
-	
 	
 	//AGREGAR CLIENTE
 	@PostMapping("/nuevo")
@@ -87,5 +98,14 @@ public class ClientesController {
 	@PutMapping("/baja/{rfc}")
 	public ResponseEntity<ClienteEntity> bajaCliente(@PathVariable String rfc) throws BusinessException {		
 		return ResponseEntity.status(HttpStatus.OK).body(serviceClientes.modificarStatus(rfc, 'I'));
+	}
+	
+	//OBTENER LA LISTA DE REGIMENES FISCALES
+	@GetMapping("/lista-regimen")
+	public ResponseEntity<List<CatRegimenEntity>> getListaRegimenFiscal(){
+		List<CatRegimenEntity> listaRegimen = serviceClientes.getListaRegimen();
+		String uid = GUIDGenerator.generateGUID();
+		LogHandler.info(uid, getClass(), "getListaRegimenFiscal"+Parseador.objectToJson(uid, listaRegimen));
+		return new ResponseEntity<>(listaRegimen, HttpStatus.OK);
 	}
 }

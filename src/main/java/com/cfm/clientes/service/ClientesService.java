@@ -1,6 +1,5 @@
 package com.cfm.clientes.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,20 +39,19 @@ public class ClientesService implements IClientesService {
 	 * Metodo para obtener la lista de los clientes
 	 */
 	@Override
-	public List<ClienteEntity> buscarClientes(char status) {
+	public List<ClienteEntity> buscarClienteStatus(char status) {
 		return repoClientes.findByStatus(status);
 	}
 	
 	/**
 	 * Metodo para obtener el registro de un cliente a traves de su RFC
-	 */
+	 */	
 	@Override
-	public List<ClienteEntity> buscarClienteByRFC(String rfc) throws BusinessException {
+	public ClienteEntity buscarClienteByRFC(String rfc) throws BusinessException {
 		Optional<ClienteEntity> cliente = repoClientes.findById(rfc);
 		if (!cliente.isPresent())
-			throw new BusinessException("El RFC del cliente no existe");
-		ClienteEntity clienteEntity = cliente.get();
-		return Arrays.asList(clienteEntity);
+			throw new BusinessException("El RFC del cliente no existe service");
+		return cliente.get();
 	}
 	
 	/**
@@ -108,4 +106,11 @@ public class ClientesService implements IClientesService {
 		clienteEntity.get().setStatus(newStatus);
 		return repoClientes.save(clienteEntity.get());
 	}
+	
+	//PREGUNTAR
+	@Override
+	public List<CatRegimenEntity> getListaRegimen() {
+		return repoCatRegimen.findAll();
+	}
+
 }
