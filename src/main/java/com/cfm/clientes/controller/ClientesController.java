@@ -99,13 +99,4 @@ public class ClientesController {
 	public ResponseEntity<ClienteEntity> bajaCliente(@PathVariable String rfc) throws BusinessException {		
 		return ResponseEntity.status(HttpStatus.OK).body(serviceClientes.modificarStatus(rfc, 'I'));
 	}
-	
-	//OBTENER LA LISTA DE REGIMENES FISCALES
-	@GetMapping("/lista-regimen")
-	public ResponseEntity<List<CatRegimenEntity>> getListaRegimenFiscal(){
-		List<CatRegimenEntity> listaRegimen = serviceClientes.getListaRegimen();
-		String uid = GUIDGenerator.generateGUID();
-		LogHandler.info(uid, getClass(), "getListaRegimenFiscal"+Parseador.objectToJson(uid, listaRegimen));
-		return new ResponseEntity<>(listaRegimen, HttpStatus.OK);
-	}
 }
