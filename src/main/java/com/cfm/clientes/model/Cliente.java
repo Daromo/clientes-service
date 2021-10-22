@@ -33,9 +33,9 @@ public class Cliente {
 	private char status;
 	
 	@NotNull(message = "El argumento telefono1 no puede ser nulo")
-	private Integer telefono1;
+	private String telefono1;
 	
-	private Integer telefono2;
+	private String telefono2;
 	
 	@NotNull(message = "El argumento correo no puede ser nula")
 	@NotEmpty(message = "El argumento correo no puede ser vacio")
@@ -48,5 +48,5 @@ public class Cliente {
 	private String domicilio;
 	
 	@NotNull(message = "El argumento codigoPostal no puede ser nulo")
-	private Integer codigoPostal;
+	private String codigoPostal;
 }

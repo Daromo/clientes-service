@@ -19,7 +19,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "tbl_cliente")
+@Entity(name = "tbl_clientes")
 public class ClienteEntity {
 	
 	@Id
@@ -55,10 +55,10 @@ public class ClienteEntity {
 	
 	@NotNull(message = "El parametro telefono1 no puede ser nulo")
 	@Column(name = "telefono1")
-	private Integer telefono1;
+	private String telefono1;
 	
 	@Column(name = "telefono2")
-	private Integer telefono2;
+	private String telefono2;
 	
 	@NotNull(message = "El parametro correo no puede ser nula")
 	@NotEmpty(message = "El parametro correo no puede ser vacio")
@@ -75,7 +75,7 @@ public class ClienteEntity {
 	
 	@NotNull(message = "El parametro codigoPostal no puede ser nulo")
 	@Column(name = "codigo_postal")
-	private Integer codigoPostal;
+	private String codigoPostal;
 	
 	@PrePersist
 	private void onCreate() {

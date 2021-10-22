@@ -23,7 +23,7 @@ create table if not exists cfm.cat_regimen_fiscal(
 	primary key(id)
 )
 
-create table cfm.tbl_cliente(
+create table cfm.tbl_clientes(
 	rfc varchar(13),
 	id_regimen_fiscal serial,
 	nombre_cliente varchar(50),
@@ -33,14 +33,14 @@ create table cfm.tbl_cliente(
 	fecha_ingreso date,
 	last_update date,
 	status char,
-	telefono1 integer not null,
-	telefono2 integer,
+	telefono1 varchar(20) not null,
+	telefono2 varchar(20),
 	correo varchar(100) not null,
 	correo_alternativo varchar(100),
 	domicilio varchar(150) not null,
-	codigo_postal integer not null,
+	codigo_postal varchar(10) not null,
 	primary key(rfc),
 	constraint fk_regimen_fiscal foreign key(id_regimen_fiscal) references cfm.cat_regimen_fiscal(id)
 )
 
-create index idx_cliente_rfc on cfm.tbl_cliente(rfc);
+create index idx_cliente_rfc on cfm.tbl_clientes(rfc);
