@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -38,9 +42,11 @@ public class ClienteEntity {
 	@Column(name = "razon_social")
 	private String razonSocial;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "fecha_ingreso")
 	private Date fechaIngreso;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_update")
 	private Date lastUpdate;
 	
@@ -70,5 +76,16 @@ public class ClienteEntity {
 	@NotNull(message = "El parametro codigoPostal no puede ser nulo")
 	@Column(name = "codigo_postal")
 	private Integer codigoPostal;
+	
+	@PrePersist
+	private void onCreate() {
+		fechaIngreso = new Date();
+		lastUpdate = new Date();
+	}
+	
+	@PreUpdate
+	private void onUpdate() {
+		lastUpdate = new Date();
+	}
 	
 }
