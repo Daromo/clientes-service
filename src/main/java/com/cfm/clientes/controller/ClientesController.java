@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cfm.clientes.exception.BusinessException;
-import com.cfm.clientes.jpa.entity.CatRegimenEntity;
 import com.cfm.clientes.jpa.entity.ClienteEntity;
 import com.cfm.clientes.model.Cliente;
 import com.cfm.clientes.service.IClientesService;
