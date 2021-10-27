@@ -60,7 +60,7 @@ public class ClientesService implements IClientesService {
 	@Override
 	public void guardar(Cliente cliente, String operacion) throws BusinessException {
 
-		Optional<CatRegimenEntity> catRegimenFiscal = repoCatRegimen.findById(cliente.getRegimenFiscal().getId());
+		Optional<CatRegimenEntity> catRegimenFiscal = repoCatRegimen.findById(cliente.getRegimenFiscalId());
 		
 		if(!catRegimenFiscal.isPresent())
 			throw new BusinessException("El regimen no existe");

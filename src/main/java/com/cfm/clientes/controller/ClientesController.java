@@ -54,9 +54,8 @@ public class ClientesController {
 		
 	//BUSCAR CLIENTE POR RFC
 	@GetMapping("/buscar/rfc/{clienteRFC}")
-	public ResponseEntity<Cliente> buscarClienteRFC(@PathVariable String clienteRFC) throws BusinessException{
-		Cliente clienteMapper = modelMapper.map(serviceClientes.buscarClienteByRFC(clienteRFC), Cliente.class);
-		return new ResponseEntity<>(clienteMapper, HttpStatus.OK);
+	public ResponseEntity<ClienteEntity> buscarClienteRFC(@PathVariable String clienteRFC) throws BusinessException{
+		return new ResponseEntity<>(serviceClientes.buscarClienteByRFC(clienteRFC), HttpStatus.OK);
 	}
 	
 	//BUSCAR CLIENTES POR REGIMEN FISCAL

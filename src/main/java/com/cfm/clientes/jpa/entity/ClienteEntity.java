@@ -81,6 +81,7 @@ public class ClienteEntity {
 	private void onCreate() {
 		fechaIngreso = new Date();
 		lastUpdate = new Date();
+		status = 'A';
 	}
 	
 	@PreUpdate
