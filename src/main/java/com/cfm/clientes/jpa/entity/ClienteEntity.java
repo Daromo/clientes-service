@@ -87,7 +87,6 @@ public class ClienteEntity {
 	@PreUpdate
 	private void onUpdate() {
 		lastUpdate = new Date();
-		status = 'A';
 	}
 	
 }
