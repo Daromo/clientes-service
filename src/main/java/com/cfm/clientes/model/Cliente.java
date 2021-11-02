@@ -30,7 +30,7 @@ public class Cliente {
 	
 	private Date lastUpdate;
 	
-	private char status;
+	private Character status;
 	
 	@NotNull(message = "El argumento telefono1 no puede ser nulo")
 	private String telefono1;

@@ -51,7 +51,7 @@ public class ClienteEntity {
 	private Date lastUpdate;
 	
 	@Column(name = "status")
-	private char status;
+	private Character status;
 	
 	@NotNull(message = "El parametro telefono1 no puede ser nulo")
 	@Column(name = "telefono1")

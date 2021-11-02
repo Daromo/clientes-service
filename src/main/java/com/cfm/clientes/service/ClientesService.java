@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.cfm.clientes.exception.BusinessException;
@@ -111,6 +112,11 @@ public class ClientesService implements IClientesService {
 	@Override
 	public List<CatRegimenEntity> getListaRegimen() {
 		return repoCatRegimen.findAll();
+	}
+
+	@Override
+	public List<ClienteEntity> buscarByExample(Example<ClienteEntity> example) {
+		return repoClientes.findAll(example);
 	}
 
 }

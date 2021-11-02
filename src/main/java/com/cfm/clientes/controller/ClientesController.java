@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +61,7 @@ public class ClientesController {
 	
 	//BUSCAR CLIENTES POR REGIMEN FISCAL
 	@GetMapping("/buscar/regimen/{searchValue}")
-	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue)throws BusinessException {
+	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue){
 		List<ClienteEntity> lista = null;
 		if (searchValue.equals("personas-fisicas")) {
 			lista = serviceClientes.buscarClienteByRegimen(13);
@@ -68,6 +69,16 @@ public class ClientesController {
 			lista = serviceClientes.buscarClienteByRegimen(12);
 		}	
 		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
+	
+	// BUSCAR CLIENTE DE ACUERDO A LOS ATRIBUTOS DEL OBJETO
+	@PostMapping("/buscar")
+	public ResponseEntity<List<ClienteEntity>> buscarCliente(@RequestBody Cliente cliente) {				
+		String uid = GUIDGenerator.generateGUID();
+		LogHandler.info(uid, getClass(), "buscarCliente:"+Parseador.objectToJson(uid, cliente));
+		ClienteEntity clienteMapper = modelMapper.map(cliente, ClienteEntity.class);
+		Example<ClienteEntity> example = Example.of(clienteMapper);
+		return new ResponseEntity<>(serviceClientes.buscarByExample(example),HttpStatus.OK);
 	}
 	
 	//AGREGAR CLIENTE
