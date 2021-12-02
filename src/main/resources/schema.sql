@@ -23,7 +23,7 @@ create table if not exists cfm.cat_regimen_fiscal(
 	primary key(id)
 )
 
-create table cfm.tbl_clientes(
+create table if not exists cfm.tbl_clientes(
 	rfc varchar(13),
 	id_regimen_fiscal serial,
 	nombre_cliente varchar(50),
