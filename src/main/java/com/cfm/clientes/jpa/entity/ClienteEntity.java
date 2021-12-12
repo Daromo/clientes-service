@@ -14,6 +14,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,10 +45,12 @@ public class ClienteEntity {
 	private String razonSocial;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "fecha_ingreso")
 	private Date fechaIngreso;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "last_update")
 	private Date lastUpdate;
 	
