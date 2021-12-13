@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,8 +28,10 @@ public class Cliente {
 	
 	private String razonSocial;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone =  "America/Mexico_City")
 	private Date fechaIngreso;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone =  "America/Mexico_City")
 	private Date lastUpdate;
 	
 	private Character status;
