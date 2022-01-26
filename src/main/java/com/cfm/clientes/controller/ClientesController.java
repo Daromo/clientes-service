@@ -60,6 +60,7 @@ public class ClientesController {
 	}
 	
 	//BUSCAR CLIENTES POR REGIMEN FISCAL
+	//BORRAR
 	@GetMapping("/buscar/regimen/{searchValue}")
 	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue){
 		List<ClienteEntity> lista = null;

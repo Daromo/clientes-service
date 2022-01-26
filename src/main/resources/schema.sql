@@ -30,7 +30,7 @@ create table if not exists cfm.tbl_clientes(
 	ap_paterno_cliente varchar(50),
 	ap_materno_cliente varchar(50),
 	razon_social varchar(100),
-	fecha_ingreso date,
+	fecha_ingreso date not null,
 	last_update date,
 	status char,
 	telefono1 varchar(20) not null,
@@ -38,9 +38,9 @@ create table if not exists cfm.tbl_clientes(
 	correo varchar(100) not null,
 	correo_alternativo varchar(100),
 	domicilio varchar(150) not null,
-	codigo_postal varchar(10) not null,
+	codigo_postal integer not null,
 	primary key(rfc),
-	constraint fk_regimen_fiscal foreign key(id_regimen_fiscal) references cfm.cat_regimen_fiscal(id)
+	constraint fk_regimen_a_clientes foreign key(id_regimen_fiscal) references cfm.cat_regimen_fiscal(id)
 )
 
 create index idx_cliente_rfc on cfm.tbl_clientes(rfc);

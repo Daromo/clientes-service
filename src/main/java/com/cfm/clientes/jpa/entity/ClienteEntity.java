@@ -11,7 +11,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,11 +22,9 @@ import lombok.Setter;
 @Setter
 @Entity(name = "tbl_clientes")
 public class ClienteEntity {
-	
 	@Id
 	private String rfc;
 	
-	@NotNull(message = "El argumento idRegimenFiscal no puede ser nulo")
 	@OneToOne
 	@JoinColumn(name="id_regimen_fiscal")
 	private CatRegimenEntity regimenFiscal;
@@ -64,25 +61,21 @@ public class ClienteEntity {
 	@Column(name = "telefono2")
 	private String telefono2;
 	
-	@NotNull(message = "El parametro correo no puede ser nula")
-	@NotEmpty(message = "El parametro correo no puede ser vacio")
 	@Column(name="correo")
 	private String correo;
 	
 	@Column(name = "correo_alternativo")
 	private String correoAlternativo;
 	
-	@NotNull(message = "El parametro domicilio no puede ser nula")
-	@NotEmpty(message = "El parametro domicilio no puede ser vacio")
 	@Column(name="domicilio")
 	private String domicilio;
 	
-	@NotNull(message = "El parametro codigoPostal no puede ser nulo")
 	@Column(name = "codigo_postal")
-	private String codigoPostal;
+	private Integer codigoPostal;
 	
 	@PrePersist
 	private void onCreate() {
+		rfc = rfc.toUpperCase();
 		fechaIngreso = new Date();
 		lastUpdate = new Date();
 		status = 'A';
@@ -92,5 +85,4 @@ public class ClienteEntity {
 	private void onUpdate() {
 		lastUpdate = new Date();
 	}
-	
 }
