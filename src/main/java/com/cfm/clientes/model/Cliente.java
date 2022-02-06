@@ -28,6 +28,8 @@ public class Cliente {
 	
 	private String razonSocial;
 	
+	private String nombreLargo;
+	
 	@NotNull(message = "El argumento fechaIngreso no puede ser nulo")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone =  "America/Mexico_City")
 	private Date fechaIngreso;

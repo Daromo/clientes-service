@@ -41,7 +41,9 @@ public class ClienteEntity {
 	@Column(name = "razon_social")
 	private String razonSocial;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "nombre_largo")
+	private String nombreLargo;
+	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "fecha_ingreso")
 	private Date fechaIngreso;
@@ -76,7 +78,6 @@ public class ClienteEntity {
 	@PrePersist
 	private void onCreate() {
 		rfc = rfc.toUpperCase();
-		fechaIngreso = new Date();
 		lastUpdate = new Date();
 		status = 'A';
 	}

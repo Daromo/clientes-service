@@ -73,7 +73,7 @@ public class ClientesService implements IClientesService {
 			throw new BusinessException("El rfc del cliente no existe");
 		
 		if(cliente.getRfc().length() != catRegimenFiscal.get().getRfcSize())
-			throw new BusinessException("RFC no valido");
+			throw new BusinessException("El RFC no es valido para el regimen fiscal seleccionado");
 		
 		ClienteEntity clienteMapper = modelMapper.map(cliente, ClienteEntity.class);
 		repoClientes.save(clienteMapper);
@@ -100,10 +100,8 @@ public class ClientesService implements IClientesService {
 	@Override
 	public ClienteEntity modificarStatus(String rfc, char newStatus) throws BusinessException {
 		Optional<ClienteEntity> clienteEntity = repoClientes.findById(rfc);
-		
 		if(!clienteEntity.isPresent())
 			throw new BusinessException("El rfc del cliente no existe");		
-		
 		clienteEntity.get().setStatus(newStatus);
 		return repoClientes.save(clienteEntity.get());
 	}
