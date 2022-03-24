@@ -13,8 +13,8 @@ public interface IClientesService {
 	List<ClienteEntity> buscarClienteStatus(char status);
 	ClienteEntity buscarClienteByRFC(String rfc) throws BusinessException;
 	void guardar(Cliente cliente, String operacion)throws BusinessException;
-	List<ClienteEntity> buscarClienteByRegimen(Integer sizeRFC);
+	//List<ClienteEntity> buscarClienteByRegimen(Integer sizeRFC);
 	ClienteEntity modificarStatus(String rfc, char newStatus) throws BusinessException;
-	List<CatRegimenEntity> getListaRegimen();
+	//List<CatRegimenEntity> getListaRegimen();
 	List<ClienteEntity> buscarByExample(Example<ClienteEntity> example);
 }

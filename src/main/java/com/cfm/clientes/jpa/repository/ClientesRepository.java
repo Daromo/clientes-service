@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.cfm.clientes.jpa.entity.ClienteEntity;
 
-
+/**
+ * @author Jose Daniel Rojas Morales
+ */
 public interface ClientesRepository extends JpaRepository<ClienteEntity, String> {
-	List<ClienteEntity> findByStatus(Character status);
+	List<ClienteEntity> findByStatusOrderByLastUpdateDesc(Character status);
 }

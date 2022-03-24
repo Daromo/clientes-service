@@ -11,7 +11,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -56,7 +55,6 @@ public class ClienteEntity {
 	@Column(name = "status")
 	private Character status;
 	
-	@NotNull(message = "El parametro telefono1 no puede ser nulo")
 	@Column(name = "telefono1")
 	private String telefono1;
 	

@@ -19,12 +19,23 @@ import com.cfm.clientes.model.ErrorDescripcion;
 import com.cfm.clientes.model.ErrorDetalle;
 import com.cfm.clientes.util.LogHandler;
 
+/**
+ * @author Jose Daniel Rojas Morales
+ * @version 1.0.0
+ */
+
 @ControllerAdvice
 @RestController
 public class ErrorResponseEntityExceptionHandler {
 	
 	private static final String NIVEL_ERROR="ERROR";
 
+	/**
+	 * Metodo para controlar las excepciones cuando el body es incompleto
+	 * @param HttpMessageNotReadableException
+	 * @param WebRequest
+	 * @return ResponseEntity<ErrorDetalle>
+	 */
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public final ResponseEntity<ErrorDetalle> handleNotReadable(HttpMessageNotReadableException ex,
 			WebRequest request) {
@@ -34,14 +45,25 @@ public class ErrorResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(details);
 	}
 	
+	/**
+	 * Metodo generico para controlar las exception
+	 * @param BusinessException
+	 * @param WebRequest
+	 * @return ResponseEntity<ErrorDetalle>
+	 */
 	@ExceptionHandler(BusinessException.class)
 	public final ResponseEntity<ErrorDetalle> handleBusinessException(BusinessException ex, WebRequest request) {
 		LogHandler.error(null, getClass(), "Ocurrio un error de negocio ", ex);
-		ErrorDetalle details = this.crearErrorDetalle("SH00002", "Intente mas tarde",
+		ErrorDetalle details = this.crearErrorDetalle("SH00002", "Intente mas tarde.",
 				ex.getMessage(), "Error. Capa de servicio.", NIVEL_ERROR);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(details);
 	}
 	
+	/**
+	 * Metodo para controlar las excepciones cuando falle la validación de un argumento anotado con @Valid
+	 * @param MethodArgumentNotValidException, WebRequest
+	 * @return ResponseEntity<ErrorDetalle>
+	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public final ResponseEntity<ErrorDetalle> handleValidacionException(MethodArgumentNotValidException ex, WebRequest request) {
 		LogHandler.error(null, getClass(), "Ocurrio un error de negocio ", ex);

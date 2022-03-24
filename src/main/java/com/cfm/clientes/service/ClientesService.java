@@ -3,9 +3,6 @@ package com.cfm.clientes.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -18,6 +15,10 @@ import com.cfm.clientes.jpa.repository.CatRegimenRepository;
 import com.cfm.clientes.jpa.repository.ClientesRepository;
 import com.cfm.clientes.model.Cliente;
 
+/**
+ * @author Jose Daniel Rojas Morales
+ * @version 1.0.0
+ */
 @Service
 public class ClientesService implements IClientesService {
 	
@@ -30,22 +31,23 @@ public class ClientesService implements IClientesService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	@Autowired
-	private EntityManager entityManager;
-	
 	private static final String OPTION_UPDATE = "modificar";
 	private static final String OPTION_SAVE = "guardar";
 	
 	/**
-	 * Metodo para obtener la lista de los clientes
+	 * Metodo para obtener la lista de clientes de acuerdo al status
+	 * @param status
+	 * @return List<ClienteEntity>
 	 */
 	@Override
 	public List<ClienteEntity> buscarClienteStatus(char status) {
-		return repoClientes.findByStatus(status);
+		return repoClientes.findByStatusOrderByLastUpdateDesc(status);
 	}
 	
 	/**
 	 * Metodo para obtener el registro de un cliente a traves de su RFC
+	 * @param Cliente RFC
+	 * @return ClienteEntity
 	 */	
 	@Override
 	public ClienteEntity buscarClienteByRFC(String rfc) throws BusinessException {
@@ -56,7 +58,9 @@ public class ClientesService implements IClientesService {
 	}
 	
 	/**
-	 * Metodo para REGISTRAR y MODIFICAR los datos de un cliente
+	 * Metodo para Agregar o Actualizar los datos de un cliente
+	 * @param Cliente
+	 * @param Tipo de operacion
 	 */
 	@Override
 	public void guardar(Cliente cliente, String operacion) throws BusinessException {
@@ -80,22 +84,10 @@ public class ClientesService implements IClientesService {
 	}
 	
 	/**
-	 * Metodo para filtrar a los clientes de acuerdo al regimen
-	 * Personas Fisicas
-	 * Personas Morales
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ClienteEntity> buscarClienteByRegimen(Integer sizeRFC) {
-		Query query = entityManager.createQuery("SELECT c FROM tbl_cliente c INNER JOIN cat_regimen_fiscal r ON r.id = c.regimenFiscal WHERE r.rfcSize = :sizeRFC");
-		query.setParameter("sizeRFC", sizeRFC);
-		return query.getResultList();
-	}
-	
-	/**
-	 * Metodo para dar de BAJA o realizar el REINGRESO de un cliente por medio del status. 
-	 * A: Activo 
-	 * I: Inactivo
+	 * Metodo para dar de BAJA o realizar el REINGRESO de un cliente por medio del status.
+	 * @param Cliente RFC
+	 * @param Nuevo status
+	 * @return ClienteEntity
 	 */
 	@Override
 	public ClienteEntity modificarStatus(String rfc, char newStatus) throws BusinessException {
@@ -106,12 +98,12 @@ public class ClientesService implements IClientesService {
 		return repoClientes.save(clienteEntity.get());
 	}
 	
-	//PREGUNTAR
-	@Override
-	public List<CatRegimenEntity> getListaRegimen() {
-		return repoCatRegimen.findAll();
-	}
-
+	/**
+	 * Metodo para buscar el registro de un cliente a traves de las propiedades del objeto 
+	 * que recibo como argumento
+	 * @param ClienteEntity
+	 * @return List<ClienteEntity>
+	 */
 	@Override
 	public List<ClienteEntity> buscarByExample(Example<ClienteEntity> example) {
 		return repoClientes.findAll(example);

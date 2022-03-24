@@ -25,6 +25,10 @@ import com.cfm.clientes.util.GUIDGenerator;
 import com.cfm.clientes.util.LogHandler;
 import com.cfm.clientes.util.Parseador;
 
+/**
+ * @author Jose Daniel Rojas Morales
+ * @version 1.0.0
+ */
 @RestController
 @RequestMapping(value="/clientes")
 public class ClientesController {
@@ -35,7 +39,10 @@ public class ClientesController {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	//LISTAR CLIENTES ACTIVOS
+	/**
+	 * Endpoint para consultar los clientes activos
+	 * @return List<ClienteEntity>
+	 */
 	@GetMapping("/activos")
 	public ResponseEntity<List<ClienteEntity>> buscarClientesActivos(){
 		List<ClienteEntity> lista = serviceClientes.buscarClienteStatus('A');
@@ -44,7 +51,10 @@ public class ClientesController {
 		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
 	
-	//LISTAR CLIENTES INACTIVOS
+	/**
+	 * Endpoint para consultar los clientes inactivos
+	 * @return List<ClienteEntity>
+	 */
 	@GetMapping("/inactivos")
 	public ResponseEntity<List<ClienteEntity>> buscarClientesInactivos(){
 		List<ClienteEntity> lista = serviceClientes.buscarClienteStatus('I');
@@ -53,26 +63,22 @@ public class ClientesController {
 		return new ResponseEntity<>(lista, HttpStatus.OK);
 	}
 		
-	//BUSCAR CLIENTE POR RFC
+	/**
+	 * Endpoint para consultar el registro de un cliente de acuerdo al RFC
+	 * @param Cliente RFC
+	 * @return ClienteEntity
+	 */
 	@GetMapping("/buscar/rfc/{clienteRFC}")
 	public ResponseEntity<ClienteEntity> buscarClienteRFC(@PathVariable String clienteRFC) throws BusinessException{
 		return new ResponseEntity<>(serviceClientes.buscarClienteByRFC(clienteRFC), HttpStatus.OK);
 	}
 	
-	//BUSCAR CLIENTES POR REGIMEN FISCAL
-	//BORRAR
-	@GetMapping("/buscar/regimen/{searchValue}")
-	public ResponseEntity<List<ClienteEntity>> filtrarClientes(@PathVariable String searchValue){
-		List<ClienteEntity> lista = null;
-		if (searchValue.equals("personas-fisicas")) {
-			lista = serviceClientes.buscarClienteByRegimen(13);
-		}else if(searchValue.equals("personas-morales")) {
-			lista = serviceClientes.buscarClienteByRegimen(12);
-		}	
-		return new ResponseEntity<>(lista, HttpStatus.OK);
-	}
-	
-	// BUSCAR CLIENTE DE ACUERDO A LOS ATRIBUTOS DEL OBJETO
+	/**
+	 * Endpoint para consultar el registro de un cliente de acuerdo a los valores 
+	 * de las propiedades del objeto que se recibe como parametro
+	 * @param Cliente
+	 * @return ClienteEntity
+	 */
 	@PostMapping("/buscar")
 	public ResponseEntity<List<ClienteEntity>> buscarCliente(@RequestBody Cliente cliente) {				
 		String uid = GUIDGenerator.generateGUID();
@@ -82,7 +88,11 @@ public class ClientesController {
 		return new ResponseEntity<>(serviceClientes.buscarByExample(example),HttpStatus.OK);
 	}
 	
-	//AGREGAR CLIENTE
+	/**
+	 * Endpoint para guardar el registro de un cliente en DB
+	 * @param Cliente
+	 * @return Cliente
+	 */
 	@PostMapping("/nuevo")
 	public ResponseEntity<Cliente> guardar(@Valid @RequestBody Cliente cliente) throws BusinessException {
 		String uid=GUIDGenerator.generateGUID();
@@ -91,20 +101,35 @@ public class ClientesController {
 		return new ResponseEntity<>(cliente, HttpStatus.OK);
 	}
 	
-	//MODIFICAR CLIENTE
+	/**
+	 * Endpoint para actualizar el registro de un cliente en DB
+	 * @param Cliente
+	 * @return Cliente
+	 * @throws BusinessException
+	 */
 	@PutMapping("/modificar")
-	public ResponseEntity<Cliente> modificar(@Valid @RequestBody Cliente cliente) throws BusinessException {
+	public ResponseEntity<Cliente> actualizar(@Valid @RequestBody Cliente cliente) throws BusinessException {
 		serviceClientes.guardar(cliente, "modificar");
 		return new ResponseEntity<>(cliente, HttpStatus.OK);
 	}
 	
-	//REACTIVAR CLIENTE
+	/**
+	 * Endpoint para reactivar a un cliente en el sistema
+	 * @param Cliente RFC
+	 * @return ClienteEntity
+	 * @throws BusinessException
+	 */
 	@PutMapping("/reactivar/{rfc}")
 	public ResponseEntity<ClienteEntity> reactivarCliente(@PathVariable String rfc) throws BusinessException {
     	return new ResponseEntity<>(serviceClientes.modificarStatus(rfc, 'A'),HttpStatus.OK);
 	}
 	
-	//BAJA CLIENTE
+	/**
+	 * Endpoint para dar de baja a un cliente en el sistema
+	 * @param Cliente RFC
+	 * @return ClienteEntity
+	 * @throws BusinessException
+	 */
 	@PutMapping("/baja/{rfc}")
 	public ResponseEntity<ClienteEntity> bajaCliente(@PathVariable String rfc) throws BusinessException {		
 		return ResponseEntity.status(HttpStatus.OK).body(serviceClientes.modificarStatus(rfc, 'I'));
