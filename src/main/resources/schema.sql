@@ -46,6 +46,7 @@ create table if not exists cfm.tbl_clientes(
 
 create index idx_cliente_rfc on cfm.tbl_clientes(rfc);
 
+/*********************************************************************************************************************/
 CREATE OR REPLACE FUNCTION func_nombre_largo() 
 	RETURNS TRIGGER 
     AS $$
@@ -59,7 +60,7 @@ CREATE OR REPLACE FUNCTION func_nombre_largo()
 			set nombre_largo = concat(new.ap_paterno_cliente,' ',new.ap_materno_cliente,' ', new.nombre_cliente)
 			where rfc = new.rfc;
 		end if;
-	RETURN NEW;
+	return NEW;
 	END;
 $$  LANGUAGE plpgsql
 
@@ -68,3 +69,24 @@ CREATE TRIGGER trigg_nombre_largo
 	ON cfm.tbl_clientes
 	FOR EACH ROW
 	EXECUTE PROCEDURE func_nombre_largo();
+
+/*********************************************************************************************************************/
+CREATE OR REPLACE FUNCTION func_update_nombre_largo() 
+	RETURNS TRIGGER 
+    AS $$
+	BEGIN
+		if new.id_regimen_fiscal = 601 then
+			new.nombre_largo = new.razon_social;
+		else
+			new.nombre_largo = concat(new.ap_paterno_cliente,' ',new.ap_materno_cliente,' ', new.nombre_cliente);
+		end if;
+	return NEW;
+	END;
+$$  LANGUAGE plpgsql
+
+CREATE TRIGGER trigg_update_nombre_largo
+	BEFORE UPDATE
+	ON cfm.tbl_clientes
+	FOR EACH ROW 
+	EXECUTE PROCEDURE func_update_nombre_largo();
+/*********************************************************************************************************************/
